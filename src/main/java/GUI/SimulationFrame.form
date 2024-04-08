@@ -25,7 +25,7 @@
           <text value="Number of queues available:"/>
         </properties>
       </component>
-      <component id="50b6b" class="javax.swing.JTextArea">
+      <component id="50b6b" class="javax.swing.JTextArea" binding="numberQueuesAvailableTextArea">
         <constraints>
           <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="2" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -42,6 +42,7 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <foreground color="-2956292"/>
           <text value="."/>
         </properties>
       </component>
@@ -51,6 +52,7 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <foreground color="-2956292"/>
           <text value="."/>
         </properties>
       </component>
@@ -60,6 +62,7 @@
           <gridbag top="0" left="0" bottom="0" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <foreground color="-2956292"/>
           <text value="."/>
         </properties>
       </component>
@@ -78,10 +81,11 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <foreground color="-2956292"/>
           <text value="."/>
         </properties>
       </component>
-      <component id="2486e" class="javax.swing.JTextArea">
+      <component id="2486e" class="javax.swing.JTextArea" binding="simulationIntervalTextArea">
         <constraints>
           <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -107,10 +111,11 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <foreground color="-2956292"/>
           <text value="."/>
         </properties>
       </component>
-      <component id="67bb1" class="javax.swing.JTextArea">
+      <component id="67bb1" class="javax.swing.JTextArea" binding="arrivalStartTextArea">
         <constraints>
           <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -136,10 +141,11 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <foreground color="-2956292"/>
           <text value="."/>
         </properties>
       </component>
-      <component id="45959" class="javax.swing.JTextArea">
+      <component id="45959" class="javax.swing.JTextArea" binding="serviceStartTextArea">
         <constraints>
           <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -160,9 +166,10 @@
       <component id="75eb1" class="javax.swing.JLabel">
         <constraints>
           <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="0.0"/>
+          <gridbag top="20" left="0" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <foreground color="-2956292"/>
           <text value="."/>
         </properties>
       </component>
@@ -182,12 +189,13 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <foreground color="-2956292"/>
           <text value="."/>
         </properties>
       </component>
       <component id="60f72" class="javax.swing.JLabel">
         <constraints>
-          <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -200,13 +208,14 @@
           <gridbag top="0" left="0" bottom="0" right="30" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <foreground color="-2956292"/>
           <text value="."/>
         </properties>
       </component>
       <component id="b35d4" class="javax.swing.JLabel">
         <constraints>
-          <grid row="8" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <gridbag weightx="0.0" weighty="0.0"/>
+          <grid row="8" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="0" left="0" bottom="0" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
           <text value="End"/>
@@ -232,7 +241,7 @@
           <columns value="7"/>
         </properties>
       </component>
-      <component id="f0171" class="javax.swing.JTextArea">
+      <component id="f0171" class="javax.swing.JTextArea" binding="arrivalEndTextArea">
         <constraints>
           <grid row="10" column="4" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
@@ -240,10 +249,10 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <columns value="3"/>
+          <columns value="7"/>
         </properties>
       </component>
-      <component id="d7d9c" class="javax.swing.JTextArea">
+      <component id="d7d9c" class="javax.swing.JTextArea" binding="serviceEndTextArea">
         <constraints>
           <grid row="12" column="4" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>

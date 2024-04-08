@@ -1,4 +1,14 @@
 package BusinessLogic;
 
-public class TimeStrategy {
+import Model.Server;
+import Model.Task;
+
+import java.util.List;
+
+public class TimeStrategy implements Strategy{
+    @Override
+    public void addTask(List<Server> servers, Task task) {
+
+    }
+
 }
