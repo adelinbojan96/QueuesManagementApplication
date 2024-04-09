@@ -21,6 +21,15 @@ public class SimulationFrame extends JDialog{
     private JLabel image;
     private JTextArea numberQueuesAvailableTextArea;
 
+    public int getNumberClientsTextArea() {
+        String people = numberClientsTextArea.getText();
+        try {
+            return Integer.parseInt(people);
+        } catch (NumberFormatException e) {
+            System.err.println("Input is not a valid integer. Returning default value.");
+            return -1;
+        }
+    }
     public int getNumberQueuesAvailableTextArea() {
         String queues = numberQueuesAvailableTextArea.getText();
 

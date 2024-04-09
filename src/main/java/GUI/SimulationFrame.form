@@ -72,7 +72,7 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <text value="Simulation Interval"/>
+          <text value="Simulation Max Time"/>
         </properties>
       </component>
       <component id="79130" class="javax.swing.JLabel">
