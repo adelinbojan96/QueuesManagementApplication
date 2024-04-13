@@ -79,28 +79,24 @@ public class Server implements Runnable {
         boolean arrived = false;
         boolean end = false;
         boolean wasInWhile = false;
-        System.out.println("Task " + task.getId() + " begin at time " + task.getArrivalTime() + " end at " + (task.getArrivalTime() + task.getServiceTime()));
-        System.out.println("Check initial simulationTime: " + simulationTimeThread);
-        System.out.println("Check if tasks are empty: " + tasks.isEmpty());
         while (numberOfPeople > 0 && simulationTimeThread <= simulationMaxInterval && !end) {
             try {
                 Thread.sleep(1000);
                 System.out.println("time: " + simulationTimeThread);
                 if(simulationTimeThread >= currentArrivalTime && !arrived)
-                {
-                    //if simulation time is at least the minimum arrival time from task
                     arrived = true;
-                    System.out.println("Task " + task.getId() + " begin at time " + simulationTimeThread);
-                    System.out.println("Current waiting period: " + waitingPeriod.get());
-                }
-
-                else if(personalizedServiceTime >= currentServiceTime)
+                if(arrived)
                 {
-                    System.out.println("task when it ends is: " + task.getServiceTime());
+                    //checks continuously
+                    System.out.println("("+task.getId() + ", " + (currentServiceTime - personalizedServiceTime) + ")");
+                }
+                if(personalizedServiceTime >= currentServiceTime)
+                {
+                    //System.out.println("task when it ends is: " + task.getServiceTime());
+                    //System.out.println("Task " + task.getId() + " ended at " + simulationTimeThread);
+                    //System.out.println("Remaining people: " + numberOfPeople);
                     end = true;
-                    System.out.println("Task " + task.getId() + " ended at " + simulationTimeThread);
                     numberOfPeople--;
-                    System.out.println("Remaining people: " + numberOfPeople);
                     removed++;
                 }
                 wasInWhile = true;

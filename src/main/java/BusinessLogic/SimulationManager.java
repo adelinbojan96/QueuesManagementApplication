@@ -3,9 +3,6 @@ package BusinessLogic;
 import GUI.SimulationFrame;
 import Model.Server;
 import Model.Task;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -42,7 +39,7 @@ public class SimulationManager {
                 arrivalEnd, serviceStart, serviceEnd))
             return;
 
-        numberOfPeople = 4;
+        numberOfPeople = 3;
         numberQueues = 2;
         Server server = new Server(numberOfPeople, numberQueues, 60, this);
         /*  Randomly generated
@@ -53,14 +50,12 @@ public class SimulationManager {
         }
          */
         //HardCoded
-        Task task1 = new Task( 1, 2, 2);
+        Task task1 = new Task(1, 2, 2);
         tasks.add(task1);
-        Task task2 = new Task(2, 3, 3);
+        Task task2 = new Task(2, 2, 4);
         tasks.add(task2);
-        Task task3 = new Task(3, 4, 3);
+        Task task3 = new Task(3, 3, 3);
         tasks.add(task3);
-        Task task4 = new Task(4, 10, 2);
-        tasks.add(task4);
         server.startProcessing(numberQueues);
 
         System.out.println("You did it.\n");
@@ -86,3 +81,4 @@ public class SimulationManager {
         return n1 != -1 && n2 != -1 && n3 != -1 && n4 != -1 && n5 != -1 && n6 != -1 && n7 != -1;
     }
 }
+
