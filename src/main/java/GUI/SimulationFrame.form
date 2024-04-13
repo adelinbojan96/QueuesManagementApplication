@@ -13,6 +13,7 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <font name="Consolas" size="14" style="0"/>
           <text value="Number of clients:"/>
         </properties>
       </component>
@@ -22,6 +23,7 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <font name="Consolas" size="14" style="0"/>
           <text value="Number of queues available:"/>
         </properties>
       </component>
@@ -72,6 +74,7 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <font name="Consolas" size="14" style="0"/>
           <text value="Simulation Max Time"/>
         </properties>
       </component>
@@ -102,6 +105,7 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <font name="Consolas" size="14" style="0"/>
           <text value="Arrival Time Bounds"/>
         </properties>
       </component>
@@ -132,6 +136,7 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <font name="Consolas" size="14" style="0"/>
           <text value="Service Time Bounds"/>
         </properties>
       </component>
@@ -156,16 +161,17 @@
       </component>
       <component id="7dac3" class="javax.swing.JButton" binding="startButton">
         <constraints>
-          <grid row="14" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="16" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <font name="Consolas" size="15" style="0"/>
           <text value="Start Simulation"/>
         </properties>
       </component>
       <component id="75eb1" class="javax.swing.JLabel">
         <constraints>
-          <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="20" left="0" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -199,6 +205,7 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <font name="Consolas" size="12" style="1"/>
           <horizontalAlignment value="0"/>
           <horizontalTextPosition value="0"/>
           <text value="Min"/>
@@ -220,6 +227,7 @@
           <gridbag top="0" left="0" bottom="0" right="10" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <font name="Consolas" size="12" style="1"/>
           <horizontalAlignment value="0"/>
           <horizontalTextPosition value="0"/>
           <text value="Max"/>
@@ -265,6 +273,35 @@
         </constraints>
         <properties>
           <columns value="3"/>
+        </properties>
+      </component>
+      <component id="29830" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <foreground color="-2956292"/>
+          <text value="."/>
+        </properties>
+      </component>
+      <component id="ea5f5" class="javax.swing.JComboBox" binding="strategyChooser">
+        <constraints>
+          <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <font name="JetBrains Mono" size="12" style="0"/>
+        </properties>
+      </component>
+      <component id="14bf" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="14" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <font name="Consolas" size="14" style="0"/>
+          <text value="Strategy for the queues"/>
         </properties>
       </component>
     </children>

@@ -6,8 +6,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class SimulationFrame extends JDialog{
     private JPanel mainPanel;
@@ -102,6 +100,7 @@ public class SimulationFrame extends JDialog{
     private JTextArea arrivalEndTextArea;
     private JTextArea serviceStartTextArea;
     private JTextArea serviceEndTextArea;
+    private JComboBox strategyChooser;
 
     public SimulationFrame()
     {
@@ -114,6 +113,7 @@ public class SimulationFrame extends JDialog{
 
         mainPanel.setBackground(Color.decode("#D2E3FC"));
         customizeButton(startButton);
+        customizeChooser(strategyChooser);
         setContentPane(mainPanel);
 
         startButton.addActionListener(e -> new SimulationManager(SimulationFrame.this));
@@ -128,6 +128,18 @@ public class SimulationFrame extends JDialog{
         button.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(Color.BLACK, 2, true),
                 new EmptyBorder(5, 20, 5, 20)
+        ));
+    }
+    private static void customizeChooser(JComboBox operationChooser)
+    {
+        operationChooser.addItem("Shortest Queue");
+        operationChooser.addItem("Shortest Time");
+        operationChooser.setBackground(Color.WHITE);
+        operationChooser.setForeground(Color.BLACK);
+        operationChooser.setFont(new Font("Consolas", Font.PLAIN, 14));
+        operationChooser.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.BLACK, 1),
+                BorderFactory.createEmptyBorder(3, 3, 3, 3)
         ));
     }
 }

@@ -6,19 +6,15 @@ import Model.Task;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-public class SimulationManager {
-    private Scheduler scheduler;
-    public SimulationFrame getCurrentFrame() {
-        return frame;
-    }
-    private SimulationFrame frame;
+import java.util.concurrent.atomic.AtomicInteger;
 
+public class SimulationManager{
+    private Scheduler scheduler;
+    private SimulationFrame frame;
     public List<Task> getTasks() {
         return tasks;
     }
-
     private final List<Task> tasks = new ArrayList<>();
-    //private SelectionPolicy
     public SimulationManager(SimulationFrame frame) {
         this.scheduler = new Scheduler();
         this.frame = frame;
@@ -39,37 +35,40 @@ public class SimulationManager {
                 arrivalEnd, serviceStart, serviceEnd))
             return;
 
-        numberOfPeople = 3;
-        numberQueues = 2;
-        Server server = new Server(numberOfPeople, numberQueues, 60, this);
-        /*  Randomly generated
-        int i;
-        for (i = 0; i < numberOfPeople; i++) {
-            Task task = generateTask(i + 1);
-            tasks.add(task);
-        }
-         */
-        //HardCoded
-        Task task1 = new Task(1, 2, 2);
-        tasks.add(task1);
-        Task task2 = new Task(2, 2, 4);
-        tasks.add(task2);
-        Task task3 = new Task(3, 3, 3);
-        tasks.add(task3);
-        server.startProcessing(numberQueues);
+        Server server = new Server(4, 2, 60, this);
+        generateAndSortTasks(numberOfPeople, arrivalStart, arrivalEnd, serviceStart, serviceEnd);
 
+        Task task1 = new Task(1, 2, 2);
+        Task task2 = new Task(2, 3, 3);
+        Task task3 = new Task(3, 4, 3);
+        Task task4 = new Task(4, 10, 2);
+        tasks.add(task1); tasks.add(task2); tasks.add(task3); tasks.add(task4);
+
+        server.startProcessing(numberQueues);
         System.out.println("You did it.\n");
         for(Task task: tasks)
             System.out.println(task.getId() + " " + task.getArrivalTime() + " " + task.getServiceTime());
 
     }
-    public Task generateTask(int index)
+    private void generateAndSortTasks(int numberOfPeople, int arrivalStart, int arrivalEnd, int serviceStart, int serviceEnd)
     {
-        int arrivalStart = frame.getArrivalStartTextArea();
-        int arrivalEnd = frame.getArrivalEndTextArea();
-        int serviceStart = frame.getServiceStartTextArea();
-        int serviceEnd = frame.getServiceEndTextArea();
-
+        Task[] task = new Task[numberOfPeople];
+        //generate it
+        for (int i = 0; i < numberOfPeople; i++)
+            task[i] = generateTask(i + 1, arrivalStart, arrivalEnd, serviceStart, serviceEnd);
+        //sort it
+        for(int i = 0; i < numberOfPeople - 1; i++)
+            for(int j = i + 1; j < numberOfPeople; j++)
+                if(task[i].getArrivalTime() > task[j].getArrivalTime())
+                {
+                    Task newTask = task[j];
+                    task[j] = task[i];
+                    task[i] = newTask;
+                }
+    }
+    private Task generateTask(int index, int arrivalStart, int arrivalEnd, int serviceStart, int serviceEnd)
+    {
+        //generate random tasks according to variables from frame
         Random random = new Random();
 
         int arrivalTime = random.nextInt(arrivalEnd - arrivalStart + 1) + arrivalStart;
@@ -80,5 +79,7 @@ public class SimulationManager {
     {
         return n1 != -1 && n2 != -1 && n3 != -1 && n4 != -1 && n5 != -1 && n6 != -1 && n7 != -1;
     }
+
+
 }
 

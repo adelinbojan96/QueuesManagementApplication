@@ -2,7 +2,9 @@ package Model;
 
 import BusinessLogic.SimulationManager;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,10 +25,22 @@ public class Server implements Runnable {
     }
     private int removed = 0;
     private int numberOfThreads;
+
+    public int getNumberOfPeople() {
+        return numberOfPeople;
+    }
+
     private int numberOfPeople;
     private int simulationMaxInterval;
     private int currentIndex = 0;
     private SimulationManager simulationManager;
+    private AtomicInteger timeSet;
+    private final Set<Integer> printedTimes;
+
+    public AtomicInteger getWaitingPeriod() {
+        return waitingPeriod;
+    }
+
     public Server(int numberOfPeople, int numberOfThreads, int simulationMaxInterval, SimulationManager simulationManager)
     {
         this.numberOfThreads = numberOfThreads;
@@ -34,7 +48,12 @@ public class Server implements Runnable {
         this.tasks = new ArrayBlockingQueue<>(Math.min(numberOfPeople, numberOfThreads));
         this.simulationMaxInterval = simulationMaxInterval;
         this.waitingPeriod = new AtomicInteger(0);
+        this.timeSet = new AtomicInteger(0);
         this.simulationManager = simulationManager;
+        this.printedTimes = new HashSet<>();
+    }
+    public AtomicInteger getTimeSet() {
+        return timeSet;
     }
 
     private void addToCurrentQueue(List<Task> tasksSimulation, int numberOfThreads)
@@ -51,10 +70,15 @@ public class Server implements Runnable {
         currentIndex += initialNumberOfThreads;
         removed = initialNumberOfThreads - numberOfElementsSucceededInAdding;
     }
+    public void addTask(Task task)
+    {
+        //add in list for one queue
+        tasks.add(task);
+    }
     public void startProcessing(int threadsToStart) {
+        //todo: this can be in simulation manager
         //Threads to start = available queues
         addToCurrentQueue(simulationManager.getTasks(), threadsToStart); //add to current queue the threads that I need to start
-
         Thread[] workerThreads = new Thread[threadsToStart];
         for (int i = 0; i < threadsToStart; i++) {
             workerThreads[i] = new Thread(this);
@@ -62,6 +86,44 @@ public class Server implements Runnable {
         for (int i = 0; i < threadsToStart; i++) {
             workerThreads[i].start();
             //number of people is decremented in the run method
+        }
+    }
+    private synchronized void printAndSet(int simulationTimeThread)
+    {
+        if (!printedTimes.contains(simulationTimeThread)) {
+            System.out.println("Time: " + simulationTimeThread);
+            printedTimes.add(simulationTimeThread);
+        }
+    }
+    private void processTask(int simulationTimeThread, int currentArrivalTime, boolean arrived, Task task, int currentServiceTime, int personalizedServiceTime, boolean end, boolean wasInWhile)
+    {
+        while (numberOfPeople > 0 && simulationTimeThread <= simulationMaxInterval && !end) {
+            try {
+                Thread.sleep(1000);
+                printAndSet(simulationTimeThread);
+                if(simulationTimeThread >= currentArrivalTime && !arrived)
+                    arrived = true;
+                if(arrived)
+                {
+                    System.out.println("("+task.getId() + ", " + (currentServiceTime - personalizedServiceTime) + ")");
+                    personalizedServiceTime++;
+                }
+                if(personalizedServiceTime >= currentServiceTime)
+                {
+                    end = true;
+                    numberOfPeople--;
+                    removed++;
+                }
+                wasInWhile = true;
+                simulationTimeThread++;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        if(numberOfPeople > 0 && wasInWhile)
+        {
+            timeSet.set(simulationTimeThread);
+            startProcessing(1);
         }
     }
     @Override
@@ -74,44 +136,11 @@ public class Server implements Runnable {
         }
         int currentServiceTime = task.getServiceTime();
         int currentArrivalTime = task.getArrivalTime();
-        int simulationTimeThread = waitingPeriod.get();
+        int simulationTimeThread = timeSet.get();
         int personalizedServiceTime = 0;
         boolean arrived = false;
         boolean end = false;
         boolean wasInWhile = false;
-        while (numberOfPeople > 0 && simulationTimeThread <= simulationMaxInterval && !end) {
-            try {
-                Thread.sleep(1000);
-                System.out.println("time: " + simulationTimeThread);
-                if(simulationTimeThread >= currentArrivalTime && !arrived)
-                    arrived = true;
-                if(arrived)
-                {
-                    //checks continuously
-                    System.out.println("("+task.getId() + ", " + (currentServiceTime - personalizedServiceTime) + ")");
-                }
-                if(personalizedServiceTime >= currentServiceTime)
-                {
-                    //System.out.println("task when it ends is: " + task.getServiceTime());
-                    //System.out.println("Task " + task.getId() + " ended at " + simulationTimeThread);
-                    //System.out.println("Remaining people: " + numberOfPeople);
-                    end = true;
-                    numberOfPeople--;
-                    removed++;
-                }
-                wasInWhile = true;
-                simulationTimeThread++;
-                if(arrived)
-                    personalizedServiceTime++;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        if(numberOfPeople > 0 && wasInWhile)
-        {
-            waitingPeriod.set(simulationTimeThread - 1);
-            startProcessing(1);
-            //waitingPeriod.addAndGet(-simulationTimeThread);
-        }
+        processTask(simulationTimeThread, currentArrivalTime, arrived, task, currentServiceTime, personalizedServiceTime, end, wasInWhile);
     }
 }
