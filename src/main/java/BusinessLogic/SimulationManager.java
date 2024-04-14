@@ -11,12 +11,8 @@ import java.util.Random;
 public class SimulationManager{
     private Scheduler scheduler;
     private SimulationFrame frame;
-    public List<Task> getTasks() {
-        return tasks;
-    }
     private final List<Task> tasks = new ArrayList<>();
     public SimulationManager(SimulationFrame frame) {
-        this.scheduler = new Scheduler();
         this.frame = frame;
         generateRandomTasks();
     }
@@ -35,15 +31,14 @@ public class SimulationManager{
                 arrivalEnd, serviceStart, serviceEnd))
             return;
 
-        Server []servers = new Server[numberQueues];
+        Server[] servers = new Server[numberQueues];
         //generateAndSortTasks(numberOfPeople, arrivalStart, arrivalEnd, serviceStart, serviceEnd);
         testing();
-        boolean timeQueue = strategyChooserString.equals("Shortest Time");
-        addClientsToQueuesAccordingly(servers, simulationMaxInterval, numberQueues, numberOfPeople, timeQueue);
+        addClientsToQueuesAccordingly(servers, simulationMaxInterval, numberQueues, numberOfPeople, strategyChooserString);
         startProcessing(servers, numberQueues);
-        System.out.println("You did it.\n");
+        System.out.println("Initial tasks:\n");
         for(Task task: tasks)
-            System.out.println(task.getId() + " " + task.getArrivalTime() + " " + task.getServiceTime());
+            System.out.println("(" + task.getId() + ", " + task.getArrivalTime() + ", " + task.getServiceTime() + ")");
     }
     private void generateAndSortTasks(int numberOfPeople, int arrivalStart, int arrivalEnd, int serviceStart, int serviceEnd)
     {
@@ -77,46 +72,36 @@ public class SimulationManager{
     }
     private void testing()
     {
-        Task[] task = new Task[5];
-        task[0] = new Task(1, 2, 2);
-        task[1] = new Task(2, 5, 3);
-        task[2] = new Task(3, 4, 6);
-        task[3] = new Task(4, 5, 8);
-        task[4] = new Task(5, 5, 2);
-        for(int i = 0; i < 5 - 1; i++)
-            for(int j = i + 1; j < 5; j++)
+        Task[] task = new Task[7];
+        task[0] = new Task(2, 2, 2);
+        task[1] = new Task(6, 2, 3);
+        task[2] = new Task(7, 2, 3);
+        task[3] = new Task(8, 2, 3);
+        task[4] = new Task(5, 4, 2);
+        task[5] = new Task(3, 5, 3);
+        task[6] = new Task(4, 5, 1);
+        for(int i = 0; i < 7 - 1; i++)
+            for(int j = i + 1; j < 7; j++)
                 if(task[i].getArrivalTime() > task[j].getArrivalTime())
                 {
                     Task newTask = task[j];
                     task[j] = task[i];
                     task[i] = newTask;
                 }
-        tasks.addAll(Arrays.asList(task).subList(0, 5));
+        tasks.addAll(Arrays.asList(task).subList(0, 7));
     }
-    private void addClientsToQueuesAccordingly(Server[] servers, int simulationMaxInterval, int numberOfQueues, int numberOfPeople, boolean time_queue)
+    private void addClientsToQueuesAccordingly(Server[] servers, int simulationMaxInterval, int numberOfQueues, int numberOfPeople, String strategyChooserString )
     {
         int i = 0;
         for(; i < numberOfQueues; i++)
         {
-            //System.out.println(tasks.get(i).getId() + " has " + (i + 1));
+            System.out.println(tasks.get(i).getId() + " has " + (i + 1));
             servers[i] = new Server(simulationMaxInterval, this, i + 1);
             Task newTask = tasks.get(i);
             servers[i].addTask(newTask);
         }
-        //scheduler.chooseStrategy(time_queue);
-        if(!time_queue)
-        {
-            //this is shortestQueue, related to people
-            ShortestQueueStrategy queueStrategy = new ShortestQueueStrategy();
-            for(; i < numberOfPeople; i++)
-                queueStrategy.addTask(List.of(servers), tasks.get(i));
-        }
-        else
-        {
-            TimeStrategy timeStrategy = new TimeStrategy();
-            for(; i < numberOfPeople; i++)
-                timeStrategy.addTask(List.of(servers), tasks.get(i));
-        }
+        scheduler = new Scheduler(servers, strategyChooserString);
+        scheduler.dispatchTasks(i, numberOfPeople, tasks);
     }
     public void startProcessing(Server[] servers, int threadsToStart) {
 

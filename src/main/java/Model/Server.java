@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server implements Runnable {
     private LinkedBlockingQueue<Task> tasks;
-
     private AtomicInteger waitingPeriod;
 
     public LinkedBlockingQueue<Task> getTasks() {

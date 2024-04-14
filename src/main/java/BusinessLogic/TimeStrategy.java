@@ -18,7 +18,7 @@ public class TimeStrategy implements Strategy{
             int index = 0;
             for(int i = 1; i < servers.size(); i++)
             {
-                BlockingQueue<Task> taskQueue = servers.get(index).getTasks();
+                BlockingQueue<Task> taskQueue = servers.get(i).getTasks();
                 List<Task> taskList = new ArrayList<>(taskQueue);
                 int waitingPeriodCurrentServer = servers.get(i).getWaitingPeriod().get() + taskList.getLast().getArrivalTime() + taskList.getLast().getServiceTime();
                 if(waitingPeriodCurrentServer < smallestTime)
