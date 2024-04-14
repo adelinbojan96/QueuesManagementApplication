@@ -22,9 +22,8 @@ public class ShortestQueueStrategy implements Strategy{
                     index = i;
                 }
             }
-            //add task in server with index i
+            //add task in server with index I
             servers.get(index).addTask(task);
         }
     }
-
 }

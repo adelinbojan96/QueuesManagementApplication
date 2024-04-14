@@ -2,97 +2,71 @@ package Model;
 
 import BusinessLogic.SimulationManager;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server implements Runnable {
-    private BlockingQueue<Task> tasks;
+    private LinkedBlockingQueue<Task> tasks;
+
     private AtomicInteger waitingPeriod;
 
-    public int getRemoved() {
-        int value = removed;
-        if(value != 0)
-        {
-            removed = 0;
-            return value;
-        }
-        else
-            return 0;
+    public LinkedBlockingQueue<Task> getTasks() {
+        return tasks;
     }
-    private int removed = 0;
-    private int numberOfThreads;
-
     public int getNumberOfPeople() {
         return numberOfPeople;
     }
 
     private int numberOfPeople;
+
     private int simulationMaxInterval;
     private int currentIndex = 0;
     private SimulationManager simulationManager;
     private AtomicInteger timeSet;
-    private final Set<Integer> printedTimes;
-
+    private static List<Integer> printedTimes;
+    private final int serverIndex;
     public AtomicInteger getWaitingPeriod() {
         return waitingPeriod;
     }
-
-    public Server(int numberOfPeople, int numberOfThreads, int simulationMaxInterval, SimulationManager simulationManager)
+    public void addWaitingPeriod(int waitingPeriod) {
+        this.waitingPeriod.addAndGet(waitingPeriod);
+    }
+    public void setWaitingPeriod(int waitingPeriod)
     {
-        this.numberOfThreads = numberOfThreads;
-        this.numberOfPeople = numberOfPeople;
-        this.tasks = new ArrayBlockingQueue<>(Math.min(numberOfPeople, numberOfThreads));
+        this.waitingPeriod.set(waitingPeriod);
+    }
+    public Server(int simulationMaxInterval, SimulationManager simulationManager, int serverIndex)
+    {
+        this.numberOfPeople = 0;
+        this.tasks = new LinkedBlockingQueue<>();
         this.simulationMaxInterval = simulationMaxInterval;
         this.waitingPeriod = new AtomicInteger(0);
         this.timeSet = new AtomicInteger(0);
         this.simulationManager = simulationManager;
-        this.printedTimes = new HashSet<>();
+        printedTimes = Collections.synchronizedList(new ArrayList<>());;
+        this.serverIndex = serverIndex;
     }
     public AtomicInteger getTimeSet() {
         return timeSet;
     }
-
-    private void addToCurrentQueue(List<Task> tasksSimulation, int numberOfThreads)
+    private void continueProcessing()
     {
-        int initialNumberOfThreads = numberOfThreads;
-        int numberOfElementsSucceededInAdding = 0;
-        //add current tasks
-        for(int i = currentIndex; i < tasksSimulation.size() && numberOfThreads > 0; i++, numberOfThreads--)
-        {
-            tasks.add(tasksSimulation.get(i));
-            numberOfElementsSucceededInAdding++;
-        }
-
-        currentIndex += initialNumberOfThreads;
-        removed = initialNumberOfThreads - numberOfElementsSucceededInAdding;
+        Thread workerThread = new Thread(this);
+        workerThread.start();
     }
     public void addTask(Task task)
     {
         //add in list for one queue
         tasks.add(task);
+        numberOfPeople++;
     }
-    public void startProcessing(int threadsToStart) {
-        //todo: this can be in simulation manager
-        //Threads to start = available queues
-        addToCurrentQueue(simulationManager.getTasks(), threadsToStart); //add to current queue the threads that I need to start
-        Thread[] workerThreads = new Thread[threadsToStart];
-        for (int i = 0; i < threadsToStart; i++) {
-            workerThreads[i] = new Thread(this);
-        }
-        for (int i = 0; i < threadsToStart; i++) {
-            workerThreads[i].start();
-            //number of people is decremented in the run method
-        }
-    }
-    private synchronized void printAndSet(int simulationTimeThread)
-    {
-        if (!printedTimes.contains(simulationTimeThread)) {
-            System.out.println("Time: " + simulationTimeThread);
-            printedTimes.add(simulationTimeThread);
+    private void printAndSet(int simulationTimeThread) {
+        synchronized (printedTimes) {
+            if (!printedTimes.contains(simulationTimeThread)) {
+                System.out.println("Time: " + simulationTimeThread);
+                printedTimes.add(simulationTimeThread);
+            }
         }
     }
     private void processTask(int simulationTimeThread, int currentArrivalTime, boolean arrived, Task task, int currentServiceTime, int personalizedServiceTime, boolean end, boolean wasInWhile)
@@ -105,14 +79,14 @@ public class Server implements Runnable {
                     arrived = true;
                 if(arrived)
                 {
-                    System.out.println("("+task.getId() + ", " + (currentServiceTime - personalizedServiceTime) + ")");
+                    System.out.println("("+task.getId() + ", " + (currentServiceTime - personalizedServiceTime) + ") with " + serverIndex);
                     personalizedServiceTime++;
                 }
                 if(personalizedServiceTime >= currentServiceTime)
                 {
                     end = true;
                     numberOfPeople--;
-                    removed++;
+                    //removed++;
                 }
                 wasInWhile = true;
                 simulationTimeThread++;
@@ -123,7 +97,7 @@ public class Server implements Runnable {
         if(numberOfPeople > 0 && wasInWhile)
         {
             timeSet.set(simulationTimeThread);
-            startProcessing(1);
+            continueProcessing();
         }
     }
     @Override

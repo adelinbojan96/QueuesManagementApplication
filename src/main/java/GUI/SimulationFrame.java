@@ -94,7 +94,9 @@ public class SimulationFrame extends JDialog{
             return -1;
         }
     }
-
+    public String getStrategyChooser() {
+        return (String) strategyChooser.getSelectedItem();
+    }
     private JTextArea simulationIntervalTextArea;
     private JTextArea arrivalStartTextArea;
     private JTextArea arrivalEndTextArea;
@@ -132,8 +134,8 @@ public class SimulationFrame extends JDialog{
     }
     private static void customizeChooser(JComboBox operationChooser)
     {
-        operationChooser.addItem("Shortest Queue");
         operationChooser.addItem("Shortest Time");
+        operationChooser.addItem("Shortest Queue");
         operationChooser.setBackground(Color.WHITE);
         operationChooser.setForeground(Color.BLACK);
         operationChooser.setFont(new Font("Consolas", Font.PLAIN, 14));
