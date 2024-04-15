@@ -1,50 +1,56 @@
 package Model;
 
 import BusinessLogic.SimulationManager;
+import GUI.QueueViewer;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server implements Runnable {
-    private LinkedBlockingQueue<Task> tasks;
-    private AtomicInteger waitingPeriod;
-
+    private final LinkedBlockingQueue<Task> tasks;
+    private final AtomicInteger waitingPeriod;
+    private final AtomicInteger serverWaitingTime;
+    private boolean on;
     public LinkedBlockingQueue<Task> getTasks() {
         return tasks;
     }
     public int getNumberOfPeople() {
         return numberOfPeople;
     }
-
     private int numberOfPeople;
-
     private int simulationMaxInterval;
-    private int currentIndex = 0;
     private SimulationManager simulationManager;
-    private AtomicInteger timeSet;
+    private final QueueViewer queueViewer;
+    private final AtomicInteger timeSet;
     private static List<Integer> printedTimes;
     private final int serverIndex;
     public AtomicInteger getWaitingPeriod() {
         return waitingPeriod;
     }
+    public AtomicInteger getServerWaitingTime() {
+        return serverWaitingTime;
+    }
     public void addWaitingPeriod(int waitingPeriod) {
-        this.waitingPeriod.addAndGet(waitingPeriod);
+        this.waitingPeriod.set((this.waitingPeriod.get() + waitingPeriod));
     }
     public void setWaitingPeriod(int waitingPeriod)
     {
         this.waitingPeriod.set(waitingPeriod);
     }
-    public Server(int simulationMaxInterval, SimulationManager simulationManager, int serverIndex)
+    public Server(int simulationMaxInterval, SimulationManager simulationManager, QueueViewer queueViewer, int serverIndex)
     {
         this.numberOfPeople = 0;
         this.tasks = new LinkedBlockingQueue<>();
         this.simulationMaxInterval = simulationMaxInterval;
         this.waitingPeriod = new AtomicInteger(0);
         this.timeSet = new AtomicInteger(0);
+        this.serverWaitingTime = new AtomicInteger(0);
         this.simulationManager = simulationManager;
-        printedTimes = Collections.synchronizedList(new ArrayList<>());;
+        this.queueViewer = queueViewer;
+        printedTimes = Collections.synchronizedList(new ArrayList<>());
         this.serverIndex = serverIndex;
+        this.on = false;
     }
     public AtomicInteger getTimeSet() {
         return timeSet;
@@ -53,6 +59,9 @@ public class Server implements Runnable {
     {
         Thread workerThread = new Thread(this);
         workerThread.start();
+    }
+    public boolean isOn() {
+        return on;
     }
     public void addTask(Task task)
     {
@@ -65,6 +74,30 @@ public class Server implements Runnable {
             if (!printedTimes.contains(simulationTimeThread)) {
                 System.out.println("Time: " + simulationTimeThread);
                 printedTimes.add(simulationTimeThread);
+                queueViewer.updateTimingText(simulationTimeThread);
+                int time = simulationManager.getScheduler().updatePeakHour(simulationTimeThread);
+                if(time!=-1)
+                    queueViewer.updatePeakHour(time);
+            }
+        }
+    }
+    private void continueOrEnd(boolean wasInWhile, int simulationTimeThread)
+    {
+        if(numberOfPeople > 0 && wasInWhile)
+        {
+            timeSet.set(simulationTimeThread);
+            continueProcessing();
+        }
+        else if(simulationTimeThread < simulationMaxInterval)
+        {
+            //set task completed
+            try{
+                Thread.sleep(1000);
+                printAndSet(simulationTimeThread);
+                queueViewer.completeProgress(serverIndex);
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -74,8 +107,12 @@ public class Server implements Runnable {
             try {
                 Thread.sleep(1000);
                 printAndSet(simulationTimeThread);
+                queueViewer.updateProgress(serverIndex, currentServiceTime, personalizedServiceTime, task);
                 if(simulationTimeThread >= currentArrivalTime && !arrived)
+                {
                     arrived = true;
+                    on = true;
+                }
                 if(arrived)
                 {
                     System.out.println("("+task.getId() + ", " + (currentServiceTime - personalizedServiceTime) + ") with " + serverIndex);
@@ -83,9 +120,9 @@ public class Server implements Runnable {
                 }
                 if(personalizedServiceTime >= currentServiceTime)
                 {
+                    on = false;
                     end = true;
                     numberOfPeople--;
-                    //removed++;
                 }
                 wasInWhile = true;
                 simulationTimeThread++;
@@ -93,11 +130,7 @@ public class Server implements Runnable {
                 e.printStackTrace();
             }
         }
-        if(numberOfPeople > 0 && wasInWhile)
-        {
-            timeSet.set(simulationTimeThread);
-            continueProcessing();
-        }
+        continueOrEnd(wasInWhile, simulationTimeThread);
     }
     @Override
     public void run() {

@@ -1,7 +1,5 @@
 package GUI;
 
-import BusinessLogic.SimulationManager;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -10,16 +8,11 @@ import java.awt.*;
 public class SimulationFrame extends JDialog{
     private JPanel mainPanel;
     private JTextArea numberClientsTextArea;
-
-    public JButton getButton() {
-        return startButton;
-    }
-
     private JButton startButton;
     private JLabel image;
     private JTextArea numberQueuesAvailableTextArea;
 
-    public int getNumberClientsTextArea() {
+    public int getNumberClients() {
         String people = numberClientsTextArea.getText();
         try {
             return Integer.parseInt(people);
@@ -28,7 +21,7 @@ public class SimulationFrame extends JDialog{
             return -1;
         }
     }
-    public int getNumberQueuesAvailableTextArea() {
+    public int getNumberQueuesAvailable() {
         String queues = numberQueuesAvailableTextArea.getText();
 
         try {
@@ -39,7 +32,7 @@ public class SimulationFrame extends JDialog{
         }
     }
 
-    public int getSimulationIntervalTextArea() {
+    public int getSimulationInterval() {
         String simulationInterval = simulationIntervalTextArea.getText();
 
         try {
@@ -51,7 +44,7 @@ public class SimulationFrame extends JDialog{
     }
 
 
-    public int getArrivalStartTextArea() {
+    public int getArrivalStart() {
         String arrivalStart = arrivalStartTextArea.getText();
 
         try {
@@ -62,7 +55,7 @@ public class SimulationFrame extends JDialog{
         }
     }
 
-    public int getArrivalEndTextArea() {
+    public int getArrivalEnd() {
         String arrivalEnd = arrivalEndTextArea.getText();
 
         try {
@@ -73,7 +66,7 @@ public class SimulationFrame extends JDialog{
         }
     }
 
-    public int getServiceStartTextArea() {
+    public int getServiceStart() {
         String serviceStart = serviceStartTextArea.getText();
 
         try {
@@ -84,7 +77,7 @@ public class SimulationFrame extends JDialog{
         }
     }
 
-    public int getServiceEndTextArea() {
+    public int getServiceEnd() {
         String serviceEnd = serviceEndTextArea.getText();
 
         try {
@@ -118,7 +111,7 @@ public class SimulationFrame extends JDialog{
         customizeChooser(strategyChooser);
         setContentPane(mainPanel);
 
-        startButton.addActionListener(e -> new SimulationManager(SimulationFrame.this));
+        startButton.addActionListener(e -> new QueueViewer(this));
 
         setModal(true);
         setVisible(true);
