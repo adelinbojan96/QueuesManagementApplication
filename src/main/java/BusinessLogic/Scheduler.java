@@ -41,23 +41,17 @@ public class Scheduler {
                 timeStrategy.addTask(servers, tasks.get(i));
         }
     }
-    public float calculateAverageWaitingTime(List<Task> tasks, int numberOfPeople)
+    public float calculateAverageWaitingTime(int numberOfPeople)
     {
-        int totalServiceTime = 0;
         int totalWaitingTime = 0;
 
-        for(Task task: tasks)
-            totalServiceTime += task.getServiceTime();
-
         for (Server server : servers) {
-            int waitingPeriod = server.getWaitingPeriod().get();
-            totalWaitingTime += waitingPeriod / server.getNumberOfPeople();
+            int waitingPeriod = server.getServerWaitingTime().get();
+            totalWaitingTime += waitingPeriod;
         }
-        System.out.println(totalServiceTime);
-        if(numberOfPeople > 0)
-            return (float) (totalWaitingTime)/servers.size() + (float) (totalServiceTime) / numberOfPeople;
-        else
-            return 0;
+        if(numberOfPeople != 0)
+            return (float) (totalWaitingTime)/(numberOfPeople);
+        return 0;
     }
     public float calculateAverageServiceTime(List<Task> tasks, int numberOfPeople)
     {
@@ -81,7 +75,7 @@ public class Scheduler {
         {
             maxHourPeak = time;
             maxValuePeak = counter;
-            return time;
+            return maxHourPeak;
         }
         return -1;
     }

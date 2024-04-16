@@ -12,15 +12,12 @@ public class Server implements Runnable {
     private final AtomicInteger waitingPeriod;
     private final AtomicInteger serverWaitingTime;
     private boolean on;
-    public LinkedBlockingQueue<Task> getTasks() {
-        return tasks;
-    }
     public int getNumberOfPeople() {
         return numberOfPeople;
     }
     private int numberOfPeople;
-    private int simulationMaxInterval;
-    private SimulationManager simulationManager;
+    private final int simulationMaxInterval;
+    private final SimulationManager simulationManager;
     private final QueueViewer queueViewer;
     private final AtomicInteger timeSet;
     private static List<Integer> printedTimes;
@@ -28,8 +25,13 @@ public class Server implements Runnable {
     public AtomicInteger getWaitingPeriod() {
         return waitingPeriod;
     }
+
     public AtomicInteger getServerWaitingTime() {
         return serverWaitingTime;
+    }
+    public void addServerWaitingTime(int time)
+    {
+        this.serverWaitingTime.addAndGet(time);
     }
     public void addWaitingPeriod(int waitingPeriod) {
         this.waitingPeriod.set((this.waitingPeriod.get() + waitingPeriod));
@@ -44,6 +46,7 @@ public class Server implements Runnable {
         this.tasks = new LinkedBlockingQueue<>();
         this.simulationMaxInterval = simulationMaxInterval;
         this.waitingPeriod = new AtomicInteger(0);
+        //this.previousWaitingPeriod = new AtomicInteger(0);
         this.timeSet = new AtomicInteger(0);
         this.serverWaitingTime = new AtomicInteger(0);
         this.simulationManager = simulationManager;
@@ -51,9 +54,6 @@ public class Server implements Runnable {
         printedTimes = Collections.synchronizedList(new ArrayList<>());
         this.serverIndex = serverIndex;
         this.on = false;
-    }
-    public AtomicInteger getTimeSet() {
-        return timeSet;
     }
     private void continueProcessing()
     {
@@ -115,7 +115,7 @@ public class Server implements Runnable {
                 }
                 if(arrived)
                 {
-                    System.out.println("("+task.getId() + ", " + (currentServiceTime - personalizedServiceTime) + ") with " + serverIndex);
+                    System.out.println("("+task.getId() + ", " + currentArrivalTime + ", " + (currentServiceTime - personalizedServiceTime) + ") in queue: " + serverIndex);
                     personalizedServiceTime++;
                 }
                 if(personalizedServiceTime >= currentServiceTime)

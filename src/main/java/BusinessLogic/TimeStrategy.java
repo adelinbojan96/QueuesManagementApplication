@@ -3,24 +3,18 @@ package BusinessLogic;
 import Model.Server;
 import Model.Task;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 
 public class TimeStrategy implements Strategy{
     @Override
     public void addTask(List<Server> servers, Task task) {
         if(!servers.isEmpty())
         {
-            BlockingQueue<Task> taskQueueFirst = servers.get(0).getTasks();
-            List<Task> taskListFirst = new ArrayList<>(taskQueueFirst);
-            int smallestTime = servers.get(0).getWaitingPeriod().get() + taskListFirst.getLast().getArrivalTime() + taskListFirst.getLast().getServiceTime();
+            int smallestTime = servers.get(0).getWaitingPeriod().get();
             int index = 0;
             for(int i = 1; i < servers.size(); i++)
             {
-                BlockingQueue<Task> taskQueue = servers.get(i).getTasks();
-                List<Task> taskList = new ArrayList<>(taskQueue);
-                int waitingPeriodCurrentServer = servers.get(i).getWaitingPeriod().get() + taskList.getLast().getArrivalTime() + taskList.getLast().getServiceTime();
+                int waitingPeriodCurrentServer = servers.get(i).getWaitingPeriod().get();
                 if(waitingPeriodCurrentServer < smallestTime)
                 {
                     smallestTime = waitingPeriodCurrentServer;
@@ -28,9 +22,16 @@ public class TimeStrategy implements Strategy{
                 }
             }
             int setArrivalTime = task.getArrivalTime();
-            int arrivalTime = smallestTime;
-            if(arrivalTime > setArrivalTime)
-                servers.get(index).addWaitingPeriod(arrivalTime - setArrivalTime); // if arrivalTime is greater
+            if(smallestTime < setArrivalTime)
+            {
+                servers.get(index).addWaitingPeriod(task.getServiceTime() + (setArrivalTime-smallestTime));
+                servers.get(index).addServerWaitingTime(task.getServiceTime());
+            }
+            else
+            {
+                servers.get(index).addWaitingPeriod(task.getServiceTime());
+                servers.get(index).addServerWaitingTime(smallestTime - setArrivalTime + task.getServiceTime());
+            }
             servers.get(index).addTask(task);
         }
     }

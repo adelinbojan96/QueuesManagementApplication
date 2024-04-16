@@ -1,9 +1,9 @@
 package Model;
 
 public class Task {
-    private int id;
-    private int arrivalTime;
-    private int serviceTime;
+    private final int id;
+    private final int arrivalTime;
+    private final int serviceTime;
 
     public Task(int id, int arrivalTime, int serviceTime) {
         this.id = id;

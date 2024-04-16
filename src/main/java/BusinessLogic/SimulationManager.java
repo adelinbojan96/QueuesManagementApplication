@@ -43,7 +43,7 @@ public class SimulationManager{
         //    System.out.println("(" + task.getId() + ", " + task.getArrivalTime() + ", " + task.getServiceTime() + ")");
 
         //UI updates
-        viewFrame.updateAverageWaitingTime(scheduler.calculateAverageWaitingTime(tasks, numberOfPeople));
+        viewFrame.updateAverageWaitingTime(scheduler.calculateAverageWaitingTime(numberOfPeople));
         viewFrame.updateAverageServiceTime(scheduler.calculateAverageServiceTime(tasks, numberOfPeople));
         //viewFrame.updatePeakHour(maxHourPeak);
     }
@@ -101,12 +101,14 @@ public class SimulationManager{
                 }
         tasks.addAll(Arrays.asList(task).subList(0, 7));
          */
+        /*
         Task[] task = new Task[4];
         task[0] = new Task(1, 2, 2);
         task[1] = new Task(2, 3, 3);
         task[2] = new Task(3, 4, 3);
         task[3] = new Task(4, 10, 2);
         tasks.addAll(Arrays.asList(task).subList(0, 4));
+         */
     }
     private void addClientsToQueuesAccordingly(Server[] servers, int simulationMaxInterval, int numberOfQueues, int numberOfPeople, String strategyChooserString )
     {
@@ -117,6 +119,8 @@ public class SimulationManager{
             servers[i] = new Server(simulationMaxInterval, this, viewFrame, i + 1);
             Task newTask = tasks.get(i);
             servers[i].addTask(newTask);
+            servers[i].setWaitingPeriod(newTask.getArrivalTime() + newTask.getServiceTime());
+            servers[i].addServerWaitingTime(newTask.getServiceTime());
         }
         scheduler = new Scheduler(servers, strategyChooserString);
         scheduler.dispatchTasks(i, numberOfPeople, tasks);
