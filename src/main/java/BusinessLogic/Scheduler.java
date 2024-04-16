@@ -4,12 +4,10 @@ import Model.Server;
 import Model.Task;
 
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class Scheduler {
-    private List<Server> servers;
-    private Strategy strategy;
-    private StrategyType strategyType;
+    private final List<Server> servers;
+    private final StrategyType strategyType;
     private int maxValuePeak;
     private int maxHourPeak;
 

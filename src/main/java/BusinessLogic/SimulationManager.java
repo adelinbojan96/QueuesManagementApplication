@@ -35,17 +35,12 @@ public class SimulationManager{
 
         Server[] servers = new Server[numberQueues];
         generateAndSortTasks(numberOfPeople, arrivalStart, arrivalEnd, serviceStart, serviceEnd);
-        //testing();
         addClientsToQueuesAccordingly(servers, simulationMaxInterval, numberQueues, numberOfPeople, strategyChooserString);
         startProcessing(servers, numberQueues);
-        //System.out.println("Initial tasks:\n");
-        //for(Task task: tasks)
-        //    System.out.println("(" + task.getId() + ", " + task.getArrivalTime() + ", " + task.getServiceTime() + ")");
 
         //UI updates
         viewFrame.updateAverageWaitingTime(scheduler.calculateAverageWaitingTime(numberOfPeople));
         viewFrame.updateAverageServiceTime(scheduler.calculateAverageServiceTime(tasks, numberOfPeople));
-        //viewFrame.updatePeakHour(maxHourPeak);
     }
     public Scheduler getScheduler() {
         return scheduler;
@@ -79,36 +74,6 @@ public class SimulationManager{
     private boolean checkValidityOfValues(int n1, int n2, int n3, int n4, int n5, int n6, int n7)
     {
         return n1 != -1 && n2 != -1 && n3 != -1 && n4 != -1 && n5 != -1 && n6 != -1 && n7 != -1;
-    }
-    private void testing()
-    {
-        /*
-        Task[] task = new Task[7];
-        task[0] = new Task(2, 2, 2);
-        task[1] = new Task(6, 2, 3);
-        task[2] = new Task(7, 2, 3);
-        task[3] = new Task(8, 2, 3);
-        task[4] = new Task(5, 4, 2);
-        task[5] = new Task(3, 5, 3);
-        task[6] = new Task(4, 5, 1);
-        for(int i = 0; i < 7 - 1; i++)
-            for(int j = i + 1; j < 7; j++)
-                if(task[i].getArrivalTime() > task[j].getArrivalTime())
-                {
-                    Task newTask = task[j];
-                    task[j] = task[i];
-                    task[i] = newTask;
-                }
-        tasks.addAll(Arrays.asList(task).subList(0, 7));
-         */
-        /*
-        Task[] task = new Task[4];
-        task[0] = new Task(1, 2, 2);
-        task[1] = new Task(2, 3, 3);
-        task[2] = new Task(3, 4, 3);
-        task[3] = new Task(4, 10, 2);
-        tasks.addAll(Arrays.asList(task).subList(0, 4));
-         */
     }
     private void addClientsToQueuesAccordingly(Server[] servers, int simulationMaxInterval, int numberOfQueues, int numberOfPeople, String strategyChooserString )
     {

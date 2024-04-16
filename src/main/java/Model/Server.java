@@ -46,7 +46,6 @@ public class Server implements Runnable {
         this.tasks = new LinkedBlockingQueue<>();
         this.simulationMaxInterval = simulationMaxInterval;
         this.waitingPeriod = new AtomicInteger(0);
-        //this.previousWaitingPeriod = new AtomicInteger(0);
         this.timeSet = new AtomicInteger(0);
         this.serverWaitingTime = new AtomicInteger(0);
         this.simulationManager = simulationManager;

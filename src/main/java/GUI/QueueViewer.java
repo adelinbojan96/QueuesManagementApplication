@@ -25,6 +25,7 @@ public class QueueViewer extends JDialog{
         setTitle("See the progress for each client in the queues");
         setSize(650, 460);
 
+        mainFrame = new JPanel();
         mainFrame.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -32,6 +33,10 @@ public class QueueViewer extends JDialog{
         gbc.insets = new Insets(10, 10, 10, 10);
         mainFrame.setBackground(Color.decode("#fdfa72"));
         setContentPane(mainFrame);
+
+        JScrollPane scrollPane = new JScrollPane(mainFrame);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        setContentPane(scrollPane);
 
         addTextFields(gbc);
 

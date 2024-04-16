@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.QueueViewer">
   <grid id="27dc6" binding="mainFrame" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="256" y="113" width="29" height="617"/>
+      <xy x="25" y="113" width="495" height="617"/>
     </constraints>
     <properties/>
     <border type="none"/>
