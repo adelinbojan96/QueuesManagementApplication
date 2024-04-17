@@ -5,6 +5,7 @@ import GUI.SimulationFrame;
 import Model.Server;
 import Model.Task;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,9 +36,13 @@ public class SimulationManager{
 
         if(!checkValidityOfValues(numberOfPeople, numberQueues, simulationMaxInterval, arrivalStart,
                 arrivalEnd, serviceStart, serviceEnd))
+        {
+            JOptionPane.showMessageDialog(frame, "Input is not a valid.");
             return;
-        if(numberOfPeople < numberQueues)
+        }
+        if(numberOfPeople < numberQueues) {
             numberQueues = numberOfPeople;
+        }
 
         Server[] servers = new Server[numberQueues];
         generateAndSortTasks(numberOfPeople, arrivalStart, arrivalEnd, serviceStart, serviceEnd);
@@ -85,7 +90,7 @@ public class SimulationManager{
             return false;
         if(n6 > n7)
             return false;
-        return n1 != -1 && n2 != -1 && n3 != -1 && n4 != -1 && n5 != -1 && n6 != -1 && n7 != -1;
+        return (n1 > 0 && n2 > 0 && n3 > 0 && n4 > 0 && n6 > 0);
     }
     private void addClientsToQueuesAccordingly(Server[] servers, int simulationMaxInterval, int numberOfQueues, int numberOfPeople, String strategyChooserString )
     {
@@ -97,6 +102,7 @@ public class SimulationManager{
             servers[i].addTask(newTask);
             servers[i].setWaitingPeriod(newTask.getArrivalTime() + newTask.getServiceTime());
             servers[i].addServerWaitingTime(newTask.getServiceTime());
+            servers[i].addElementToArray(newTask.getArrivalTime() + newTask.getServiceTime());
         }
         scheduler = new Scheduler(servers, strategyChooserString);
         scheduler.dispatchTasks(i, numberOfPeople, tasks);

@@ -53,6 +53,7 @@ public class Scheduler {
     public float calculateAverageServiceTime(List<Task> tasks, int numberOfPeople)
     {
         int totalServiceTime = 0;
+
         for(Task task: tasks)
             totalServiceTime += task.getServiceTime();
 

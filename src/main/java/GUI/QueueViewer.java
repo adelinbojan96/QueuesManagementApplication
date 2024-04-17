@@ -18,7 +18,7 @@ public class QueueViewer extends JDialog{
     public QueueViewer(SimulationFrame simulationFrame)
     {
         this.frame = simulationFrame;
-        this.progressBar = new JProgressBar[simulationFrame.getNumberQueuesAvailable() + 1];
+        this.progressBar = (simulationFrame.getNumberQueuesAvailable() > 0) ? new JProgressBar[simulationFrame.getNumberQueuesAvailable() + 1] : new JProgressBar[1];
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         setTitle("See the progress for each client in the queues");

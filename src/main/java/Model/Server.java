@@ -12,10 +12,8 @@ public class Server implements Runnable {
     private final LinkedBlockingQueue<Task> tasks;
     private final AtomicInteger waitingPeriod;
     private final AtomicInteger serverWaitingTime;
+    private final ArrayList<Integer> waitingPeriodsForClients = new ArrayList<>();
     private boolean on;
-    public int getNumberOfPeople() {
-        return numberOfPeople;
-    }
     private int numberOfPeople;
     private final int simulationMaxInterval;
     private final SimulationManager simulationManager;
@@ -24,10 +22,23 @@ public class Server implements Runnable {
     private static List<Integer> printedTimes;
     private final int serverIndex;
     private final boolean displayTxtFile;
+    public ArrayList<Integer> getWaitingPeriodsForClients()
+    {
+        return waitingPeriodsForClients;
+    }
+    public void deleteFirstIElementsFromArrayList(int i)
+    {
+        if (i > 0) {
+            waitingPeriodsForClients.subList(0, i).clear();
+        }
+    }
+    public void addElementToArray(int value)
+    {
+        waitingPeriodsForClients.addLast(value);
+    }
     public AtomicInteger getWaitingPeriod() {
         return waitingPeriod;
     }
-
     public AtomicInteger getServerWaitingTime() {
         return serverWaitingTime;
     }
@@ -125,10 +136,13 @@ public class Server implements Runnable {
                 }
                 if(arrived)
                 {
-                    try {
-                        simulationManager.getFrame().writeToFile("("+task.getId() + ", " + currentArrivalTime + ", " + (currentServiceTime - personalizedServiceTime) + ") in queue: " + serverIndex);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                    if(displayTxtFile)
+                    {
+                        try {
+                            simulationManager.getFrame().writeToFile("("+task.getId() + ", " + currentArrivalTime + ", " + (currentServiceTime - personalizedServiceTime) + ") in queue: " + serverIndex);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     personalizedServiceTime++;
                 }

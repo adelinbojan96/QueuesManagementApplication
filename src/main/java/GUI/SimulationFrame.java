@@ -14,7 +14,6 @@ public class SimulationFrame extends JDialog{
         try {
             return Integer.parseInt(people);
         } catch (NumberFormatException e) {
-            System.err.println("Input is not a valid integer. Returning default value.");
             return -1;
         }
     }
@@ -24,7 +23,6 @@ public class SimulationFrame extends JDialog{
         try {
             return Integer.parseInt(queues);
         } catch (NumberFormatException e) {
-            System.err.println("Input is not a valid integer. Returning default value.");
             return -1;
         }
     }
@@ -34,7 +32,6 @@ public class SimulationFrame extends JDialog{
         try {
             return Integer.parseInt(simulationInterval);
         } catch (NumberFormatException e) {
-            System.err.println("Input is not a valid integer. Returning default value.");
             return -1;
         }
     }
@@ -44,7 +41,6 @@ public class SimulationFrame extends JDialog{
         try {
             return Integer.parseInt(arrivalStart);
         } catch (NumberFormatException e) {
-            System.err.println("Input is not a valid integer. Returning default value.");
             return -1;
         }
     }
@@ -54,7 +50,6 @@ public class SimulationFrame extends JDialog{
         try {
             return Integer.parseInt(arrivalEnd);
         } catch (NumberFormatException e) {
-            System.err.println("Input is not a valid integer. Returning default value.");
             return -1;
         }
     }
@@ -64,7 +59,6 @@ public class SimulationFrame extends JDialog{
         try {
             return Integer.parseInt(serviceStart);
         } catch (NumberFormatException e) {
-            System.err.println("Input is not a valid integer. Returning default value.");
             return -1;
         }
     }
@@ -74,7 +68,6 @@ public class SimulationFrame extends JDialog{
         try {
             return Integer.parseInt(serviceEnd);
         } catch (NumberFormatException e) {
-            System.err.println("Input is not a valid integer. Returning default value.");
             return -1;
         }
     }

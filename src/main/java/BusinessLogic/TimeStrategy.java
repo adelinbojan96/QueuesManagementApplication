@@ -21,18 +21,22 @@ public class TimeStrategy implements Strategy{
                     index = i;
                 }
             }
-            int setArrivalTime = task.getArrivalTime();
-            if(smallestTime < setArrivalTime)
-            {
-                servers.get(index).addWaitingPeriod(task.getServiceTime() + (setArrivalTime-smallestTime));
-                servers.get(index).addServerWaitingTime(task.getServiceTime());
-            }
-            else
-            {
-                servers.get(index).addWaitingPeriod(task.getServiceTime());
-                servers.get(index).addServerWaitingTime(smallestTime - setArrivalTime + task.getServiceTime());
-            }
+            timeUpdate(smallestTime, servers, task, index);
             servers.get(index).addTask(task);
+        }
+    }
+    private void timeUpdate(int smallestTime, List<Server> servers, Task task, int index)
+    {
+        int setArrivalTime = task.getArrivalTime();
+        if(smallestTime < setArrivalTime)
+        {
+            servers.get(index).addWaitingPeriod(task.getServiceTime() + (setArrivalTime-smallestTime));
+            servers.get(index).addServerWaitingTime(task.getServiceTime());
+        }
+        else
+        {
+            servers.get(index).addWaitingPeriod(task.getServiceTime());
+            servers.get(index).addServerWaitingTime(smallestTime - setArrivalTime + task.getServiceTime());
         }
     }
 }
