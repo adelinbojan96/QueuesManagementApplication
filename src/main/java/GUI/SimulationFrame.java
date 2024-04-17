@@ -139,7 +139,8 @@ public class SimulationFrame extends JDialog{
         });
     }
     public void writeToFile(String string) throws IOException {
-        writer.write(string + "\n");
+        if(writer != null)
+            writer.write(string + "\n");
     }
     private static void customizeButton(JButton button)
     {
