@@ -3,6 +3,7 @@ package Model;
 import BusinessLogic.SimulationManager;
 import GUI.QueueViewer;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -22,6 +23,7 @@ public class Server implements Runnable {
     private final AtomicInteger timeSet;
     private static List<Integer> printedTimes;
     private final int serverIndex;
+    private final boolean displayTxtFile;
     public AtomicInteger getWaitingPeriod() {
         return waitingPeriod;
     }
@@ -40,7 +42,7 @@ public class Server implements Runnable {
     {
         this.waitingPeriod.set(waitingPeriod);
     }
-    public Server(int simulationMaxInterval, SimulationManager simulationManager, QueueViewer queueViewer, int serverIndex)
+    public Server(int simulationMaxInterval, SimulationManager simulationManager, boolean displayTxtFile, QueueViewer queueViewer, int serverIndex)
     {
         this.numberOfPeople = 0;
         this.tasks = new LinkedBlockingQueue<>();
@@ -49,7 +51,9 @@ public class Server implements Runnable {
         this.timeSet = new AtomicInteger(0);
         this.serverWaitingTime = new AtomicInteger(0);
         this.simulationManager = simulationManager;
+        this.displayTxtFile = displayTxtFile;
         this.queueViewer = queueViewer;
+
         printedTimes = Collections.synchronizedList(new ArrayList<>());
         this.serverIndex = serverIndex;
         this.on = false;
@@ -71,7 +75,14 @@ public class Server implements Runnable {
     private void printAndSet(int simulationTimeThread) {
         synchronized (printedTimes) {
             if (!printedTimes.contains(simulationTimeThread)) {
-                System.out.println("Time: " + simulationTimeThread);
+                if(displayTxtFile)
+                {
+                    try {
+                        simulationManager.getFrame().writeToFile("Time: " + simulationTimeThread);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
                 printedTimes.add(simulationTimeThread);
                 queueViewer.updateTimingText(simulationTimeThread);
                 int time = simulationManager.getScheduler().updatePeakHour(simulationTimeThread);
@@ -114,7 +125,11 @@ public class Server implements Runnable {
                 }
                 if(arrived)
                 {
-                    System.out.println("("+task.getId() + ", " + currentArrivalTime + ", " + (currentServiceTime - personalizedServiceTime) + ") in queue: " + serverIndex);
+                    try {
+                        simulationManager.getFrame().writeToFile("("+task.getId() + ", " + currentArrivalTime + ", " + (currentServiceTime - personalizedServiceTime) + ") in queue: " + serverIndex);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     personalizedServiceTime++;
                 }
                 if(personalizedServiceTime >= currentServiceTime)

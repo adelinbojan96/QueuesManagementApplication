@@ -9,13 +9,12 @@ import java.text.DecimalFormat;
 
 public class QueueViewer extends JDialog{
     private final SimulationFrame frame;
-    private JPanel mainFrame;
+    private final JPanel mainFrame;
     private final JProgressBar[] progressBar;
     private JLabel timeLabel;
-    private JLabel averageWaitingTime;
-    private JLabel averageServiceTime;
-    private JLabel peakHour;
-
+    private JLabel averageWaitingTime = null;
+    private JLabel averageServiceTime = null;
+    private JLabel peakHour = null;
     public QueueViewer(SimulationFrame simulationFrame)
     {
         this.frame = simulationFrame;
@@ -159,5 +158,14 @@ public class QueueViewer extends JDialog{
     {
         //setting the peak hour according to the value provided by the scheduler from the simulation manager
         peakHour.setText("Peak hour: " + value);
+    }
+    public String getAverageWaitingTime() {
+        return averageWaitingTime.getText();
+    }
+    public String getAverageServiceTime() {
+        return averageServiceTime.getText();
+    }
+    public String getPeakHour() {
+        return peakHour.getText();
     }
 }

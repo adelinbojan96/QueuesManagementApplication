@@ -4,14 +4,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class SimulationFrame extends JDialog{
-    private JPanel mainPanel;
-    private JTextArea numberClientsTextArea;
-    private JButton startButton;
-    private JLabel image;
-    private JTextArea numberQueuesAvailableTextArea;
-
     public int getNumberClients() {
         String people = numberClientsTextArea.getText();
         try {
@@ -31,7 +28,6 @@ public class SimulationFrame extends JDialog{
             return -1;
         }
     }
-
     public int getSimulationInterval() {
         String simulationInterval = simulationIntervalTextArea.getText();
 
@@ -42,8 +38,6 @@ public class SimulationFrame extends JDialog{
             return -1;
         }
     }
-
-
     public int getArrivalStart() {
         String arrivalStart = arrivalStartTextArea.getText();
 
@@ -54,7 +48,6 @@ public class SimulationFrame extends JDialog{
             return -1;
         }
     }
-
     public int getArrivalEnd() {
         String arrivalEnd = arrivalEndTextArea.getText();
 
@@ -65,7 +58,6 @@ public class SimulationFrame extends JDialog{
             return -1;
         }
     }
-
     public int getServiceStart() {
         String serviceStart = serviceStartTextArea.getText();
 
@@ -76,7 +68,6 @@ public class SimulationFrame extends JDialog{
             return -1;
         }
     }
-
     public int getServiceEnd() {
         String serviceEnd = serviceEndTextArea.getText();
 
@@ -90,13 +81,22 @@ public class SimulationFrame extends JDialog{
     public String getStrategyChooser() {
         return (String) strategyChooser.getSelectedItem();
     }
+    public boolean isCreateTxtFileSelected() {
+        return createTxtFileCheckBox.isSelected();
+    }
+    private JPanel mainPanel;
+    private JTextArea numberClientsTextArea;
+    private JButton startButton;
+    private JLabel image;
+    private JTextArea numberQueuesAvailableTextArea;
     private JTextArea simulationIntervalTextArea;
     private JTextArea arrivalStartTextArea;
     private JTextArea arrivalEndTextArea;
     private JTextArea serviceStartTextArea;
     private JTextArea serviceEndTextArea;
     private JComboBox strategyChooser;
-
+    private JCheckBox createTxtFileCheckBox;
+    private BufferedWriter writer = null;
     public SimulationFrame()
     {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -111,10 +111,35 @@ public class SimulationFrame extends JDialog{
         customizeChooser(strategyChooser);
         setContentPane(mainPanel);
 
-        startButton.addActionListener(e -> new QueueViewer(this));
+        buttonAction();
 
         setModal(true);
         setVisible(true);
+    }
+    private void buttonAction()
+    {
+        startButton.addActionListener(e ->{
+            if(isCreateTxtFileSelected())
+            {
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"));
+                    this.writer = writer;
+                    QueueViewer queueViewer = new QueueViewer(this);
+                    writeToFile("Simulation Results: ");
+                    writeToFile(queueViewer.getAverageWaitingTime());
+                    writeToFile(queueViewer.getAverageServiceTime());
+                    writeToFile(queueViewer.getPeakHour());
+                    writer.close();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+            else
+                new QueueViewer(this);
+        });
+    }
+    public void writeToFile(String string) throws IOException {
+        writer.write(string + "\n");
     }
     private static void customizeButton(JButton button)
     {

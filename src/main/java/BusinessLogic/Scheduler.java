@@ -11,10 +11,9 @@ public class Scheduler {
     private int maxValuePeak;
     private int maxHourPeak;
 
-    //should theoretically send task to servers according to desired strategy
     private enum StrategyType {
         STRATEGY_QUEUE,
-        STRATEGY_TIME;
+        STRATEGY_TIME
     }
     public Scheduler(Server[] servers, String strategy)
     {
@@ -48,7 +47,7 @@ public class Scheduler {
             totalWaitingTime += waitingPeriod;
         }
         if(numberOfPeople != 0)
-            return (float) (totalWaitingTime)/(numberOfPeople);
+            return (float) (totalWaitingTime) / (numberOfPeople);
         return 0;
     }
     public float calculateAverageServiceTime(List<Task> tasks, int numberOfPeople)
