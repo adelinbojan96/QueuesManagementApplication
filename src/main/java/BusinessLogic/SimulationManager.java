@@ -6,16 +6,20 @@ import Model.Server;
 import Model.Task;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class SimulationManager{
     private Scheduler scheduler;
     private final SimulationFrame frame;
     private final QueueViewer viewFrame;
     private final List<Task> tasks = new ArrayList<>();
+    private final Lock lock = new ReentrantLock();
     private final boolean createTxtFile;
     public SimulationManager(SimulationFrame frame, QueueViewer queueViewer) {
         this.frame = frame;
@@ -23,6 +27,11 @@ public class SimulationManager{
         this.createTxtFile = frame.isCreateTxtFileSelected();
         generateRandomTasks();
     }
+    public void lock()
+    {
+        lock.lock();
+    }
+    public void unlock(){lock.unlock();}
     private void generateRandomTasks()
     {
         int numberOfPeople = frame.getNumberClients();
@@ -118,6 +127,32 @@ public class SimulationManager{
             //number of people is decremented in the run method
         }
 
+    }
+    public void deleteFromTasks(Task task)
+    {
+        if(tasks.contains(task))
+            this.tasks.remove(task);
+    }
+    public void displayWaitingClients() throws IOException {
+        StringBuilder displayClientsText = new StringBuilder();
+        if(tasks.size() == 1)
+            displayClientsText.append("Waiting client: (").append(tasks.get(0).getId()).append(", ").append(tasks.get(0).getArrivalTime()).append(", ").append(tasks.get(0).getServiceTime()).append(")");
+        else if(tasks.size() > 1) {
+            for (int i = 0; i < tasks.size(); i++) {
+                if (i == 0) {
+                    assert false;
+                    displayClientsText.append("Waiting clients: (").append(tasks.get(i).getId()).append(", ").append(tasks.get(i).getArrivalTime()).append(", ").append(tasks.get(i).getServiceTime()).append("), ");
+                } else if (i == tasks.size() - 1) {
+                    assert false;
+                    displayClientsText.append("(").append(tasks.get(i).getId()).append(", ").append(tasks.get(i).getArrivalTime()).append(", ").append(tasks.get(i).getServiceTime()).append(")");
+                } else {
+                    assert false;
+                    displayClientsText.append("(").append(tasks.get(i).getId()).append(", ").append(tasks.get(i).getArrivalTime()).append(", ").append(tasks.get(i).getServiceTime()).append("), ");
+                }
+            }
+        }
+        if(!displayClientsText.isEmpty())
+            frame.writeToFile(displayClientsText.toString());
     }
 }
 

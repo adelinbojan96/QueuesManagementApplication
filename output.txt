@@ -1,51 +1,76 @@
 Time: 0
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 1
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 2
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 3
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 4
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 5
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 6
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 7
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 8
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 9
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 10
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 11
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 12
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 13
+Waiting clients: (1, 14, 4), (2, 18, 3), (4, 20, 2), (3, 29, 2)
 Time: 14
+Waiting clients: (2, 18, 3), (4, 20, 2), (3, 29, 2)
+(1, 14, 4) in queue: 1
 Time: 15
+Waiting clients: (2, 18, 3), (4, 20, 2), (3, 29, 2)
+(1, 14, 3) in queue: 1
 Time: 16
+Waiting clients: (2, 18, 3), (4, 20, 2), (3, 29, 2)
+(1, 14, 2) in queue: 1
 Time: 17
+Waiting clients: (2, 18, 3), (4, 20, 2), (3, 29, 2)
+(1, 14, 1) in queue: 1
 Time: 18
+Waiting clients: (4, 20, 2), (3, 29, 2)
+(2, 18, 3) in queue: 2
 Time: 19
+Waiting clients: (4, 20, 2), (3, 29, 2)
+(2, 18, 2) in queue: 2
 Time: 20
-(3, 20, 3) in queue: 1
+Waiting client: (3, 29, 2)
+(2, 18, 1) in queue: 2
+(4, 20, 2) in queue: 1
 Time: 21
-(3, 20, 2) in queue: 1
+Waiting client: (3, 29, 2)
+(4, 20, 1) in queue: 1
 Time: 22
-(3, 20, 1) in queue: 1
+Waiting client: (3, 29, 2)
 Time: 23
+Waiting client: (3, 29, 2)
 Time: 24
-(2, 24, 4) in queue: 2
+Waiting client: (3, 29, 2)
 Time: 25
-(1, 25, 3) in queue: 1
-(2, 24, 3) in queue: 2
+Waiting client: (3, 29, 2)
 Time: 26
-(2, 24, 2) in queue: 2
-(1, 25, 2) in queue: 1
+Waiting client: (3, 29, 2)
 Time: 27
-(1, 25, 1) in queue: 1
-(2, 24, 1) in queue: 2
+Waiting client: (3, 29, 2)
 Time: 28
-(4, 25, 4) in queue: 2
+Waiting client: (3, 29, 2)
 Time: 29
-(4, 25, 3) in queue: 2
+(3, 29, 2) in queue: 1
 Time: 30
-(4, 25, 2) in queue: 2
+(3, 29, 1) in queue: 1
 Time: 31
-(4, 25, 1) in queue: 2
-Time: 32
 Simulation Results: 
-Average Waiting Time: 4.25
-Average Service Time: 3.5
-Peak hour: 26
+Average Waiting Time: 2.75
+Average Service Time: 2.75
+Peak hour: 20

@@ -64,7 +64,6 @@ public class Server implements Runnable {
         this.simulationManager = simulationManager;
         this.displayTxtFile = displayTxtFile;
         this.queueViewer = queueViewer;
-
         printedTimes = Collections.synchronizedList(new ArrayList<>());
         this.serverIndex = serverIndex;
         this.on = false;
@@ -90,9 +89,11 @@ public class Server implements Runnable {
                 {
                     try {
                         simulationManager.getFrame().writeToFile("Time: " + simulationTimeThread);
+                        simulationManager.displayWaitingClients();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+
                 }
                 printedTimes.add(simulationTimeThread);
                 queueViewer.updateTimingText(simulationTimeThread);
@@ -122,44 +123,38 @@ public class Server implements Runnable {
             }
         }
     }
-    private void processTask(int simulationTimeThread, int currentArrivalTime, boolean arrived, Task task, int currentServiceTime, int personalizedServiceTime, boolean end, boolean wasInWhile)
-    {
+    private void processTask(int simulationTimeThread, int currentArrivalTime, boolean arrived, Task task, int currentServiceTime, int personalizedServiceTime, boolean end, boolean wasInWhile) {
         while (numberOfPeople > 0 && simulationTimeThread <= simulationMaxInterval && !end) {
+            try {simulationManager.lock();
+                if (!arrived && simulationTimeThread >= currentArrivalTime)
+                { arrived = true; on = true; simulationManager.deleteFromTasks(task);}
+            } finally {
+                simulationManager.unlock();
+            }
             try {
                 Thread.sleep(1000);
-                printAndSet(simulationTimeThread);
-                queueViewer.updateProgress(serverIndex, currentServiceTime, personalizedServiceTime, task);
-                if(simulationTimeThread >= currentArrivalTime && !arrived)
-                {
-                    arrived = true;
-                    on = true;
-                }
-                if(arrived)
-                {
-                    if(displayTxtFile)
-                    {
-                        try {
-                            simulationManager.getFrame().writeToFile("("+task.getId() + ", " + currentArrivalTime + ", " + (currentServiceTime - personalizedServiceTime) + ") in queue: " + serverIndex);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    personalizedServiceTime++;
-                }
-                if(personalizedServiceTime >= currentServiceTime)
-                {
-                    on = false;
-                    end = true;
-                    numberOfPeople--;
-                }
-                wasInWhile = true;
-                simulationTimeThread++;
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
+            printAndSet(simulationTimeThread);
+            queueViewer.updateProgress(serverIndex, currentServiceTime, personalizedServiceTime, task);
+            if (arrived) {
+                if (displayTxtFile) {
+                    try {
+                        simulationManager.getFrame().writeToFile("(" + task.getId() + ", " + currentArrivalTime + ", " + (currentServiceTime - personalizedServiceTime) + ") in queue: " + serverIndex);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                personalizedServiceTime++;
+            }
+            if (personalizedServiceTime >= currentServiceTime)
+            {on = false; end = true; numberOfPeople--;}
+            wasInWhile = true;simulationTimeThread++;
         }
         continueOrEnd(wasInWhile, simulationTimeThread);
     }
+
     @Override
     public void run() {
         Task task;
@@ -175,6 +170,7 @@ public class Server implements Runnable {
         boolean arrived = false;
         boolean end = false;
         boolean wasInWhile = false;
+
         processTask(simulationTimeThread, currentArrivalTime, arrived, task, currentServiceTime, personalizedServiceTime, end, wasInWhile);
     }
 }

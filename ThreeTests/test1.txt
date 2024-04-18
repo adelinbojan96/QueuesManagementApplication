@@ -1,0 +1,64 @@
+Time: 0
+Waiting clients: (4, 8, 4), (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 1
+Waiting clients: (4, 8, 4), (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 2
+Waiting clients: (4, 8, 4), (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 3
+Waiting clients: (4, 8, 4), (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 4
+Waiting clients: (4, 8, 4), (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 5
+Waiting clients: (4, 8, 4), (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 6
+Waiting clients: (4, 8, 4), (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 7
+Waiting clients: (4, 8, 4), (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 8
+Waiting clients: (2, 20, 2), (3, 22, 3), (1, 22, 3)
+(4, 8, 4) in queue: 1
+Time: 9
+Waiting clients: (2, 20, 2), (3, 22, 3), (1, 22, 3)
+(4, 8, 3) in queue: 1
+Time: 10
+Waiting clients: (2, 20, 2), (3, 22, 3), (1, 22, 3)
+(4, 8, 2) in queue: 1
+Time: 11
+Waiting clients: (2, 20, 2), (3, 22, 3), (1, 22, 3)
+(4, 8, 1) in queue: 1
+Time: 12
+Waiting clients: (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 13
+Waiting clients: (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 14
+Waiting clients: (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 15
+Waiting clients: (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 16
+Waiting clients: (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 17
+Waiting clients: (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 18
+Waiting clients: (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 19
+Waiting clients: (2, 20, 2), (3, 22, 3), (1, 22, 3)
+Time: 20
+Waiting clients: (3, 22, 3), (1, 22, 3)
+(2, 20, 2) in queue: 2
+Time: 21
+Waiting clients: (3, 22, 3), (1, 22, 3)
+(2, 20, 1) in queue: 2
+Time: 22
+(3, 22, 3) in queue: 1
+(1, 22, 3) in queue: 2
+Time: 23
+(3, 22, 2) in queue: 1
+(1, 22, 2) in queue: 2
+Time: 24
+(3, 22, 1) in queue: 1
+(1, 22, 1) in queue: 2
+Time: 25
+Simulation Results: 
+Average Waiting Time: 3
+Average Service Time: 3
+Peak hour: 22
