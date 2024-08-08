@@ -1,5 +1,7 @@
 #Description
 A queues management application which simulates in real time the division of clients to different queues according to 2 main algorithms (strategies): shortest time or shortest queue. 
+For this application threads were used, the main objective being understanding the way threads work. Each thread sleeps for a period of time of 1 second. The real-time update can
+be seen after entering the details in the main frame.
 
 
 
